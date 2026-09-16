@@ -61,57 +61,57 @@ const channels: Channel[] = [
 ];
 
 const dms = [
-  { name: "Azure, Dauntedbird, Rishth...", active: true, unread: 3 },
-  { name: "Praneel230", active: false, unread: 0 },
-  { name: "Rishthepro", active: false, unread: 0 },
-  { name: "Azure, Dauntedbird", active: false, unread: 2 },
-  { name: "Floppy", active: false, unread: 0 },
-  { name: "jazil", active: false, unread: 0 },
-  { name: "AmandaBlue", active: false, unread: 0 },
-  { name: "nokoto", active: false, unread: 0 },
+  { name: "Milo, June, Rex...", active: true, unread: 3 },
+  { name: "Theo320", active: false, unread: 0 },
+  { name: "Junebug", active: false, unread: 0 },
+  { name: "Milo, Rex", active: false, unread: 2 },
+  { name: "Pippa", active: false, unread: 0 },
+  { name: "kozmo", active: false, unread: 0 },
+  { name: "LenaGray", active: false, unread: 0 },
+  { name: "ono", active: false, unread: 0 },
 ];
 
 const messages = [
   {
-    name: "Azure",
+    name: "Milo",
     color: "bg-purple-500",
-    initial: "A",
+    initial: "M",
     time: "4:21 PM",
     texts: [
-      "ok so i got the ghost text working in the demo",
-      "type in the box below and hit Tab to accept",
+      "ok so movie night still on for friday?",
+      "i can bring snacks after practice",
     ],
   },
   {
-    name: "Dauntedbird",
+    name: "June",
     color: "bg-amber-600",
-    initial: "D",
+    initial: "J",
     time: "4:24 PM",
     texts: [
-      "Yooo that prediction is fast",
-      "it finished my whole sentence wtf",
+      "Yooo yes im in",
+      "i'll bring the extra controller too",
     ],
   },
   {
-    name: "Rishthepro",
+    name: "Rex",
     color: "bg-green-700",
     initial: "R",
     time: "4:26 PM",
     texts: [
-      "It's called adaptation",
-      "wincotypist just knows what im gonna say",
+      "bet, i'll handle drinks",
+      "someone grab ice on the way",
     ],
     hasAttachment: true,
   },
   {
-    name: "Dauntedbird",
+    name: "June",
     color: "bg-amber-600",
-    initial: "D",
+    initial: "J",
     time: "4:26 PM",
-    texts: ["try typing 'the demo site will' in the box"],
+    texts: ["also can we start at 7 instead of 8?"],
   },
   {
-    name: "Rishthepro",
+    name: "Rex",
     color: "bg-green-700",
     initial: "R",
     time: "4:26 PM",
@@ -256,7 +256,7 @@ export default function SlackMock() {
           <div className="flex h-[52px] shrink-0 items-center gap-2 border-b border-white/10 px-4">
             <Star size={18} className="text-gray-300" />
             <span className="text-[16px] font-bold text-white">
-              Azure, Dauntedbird, Rishthepro
+              Milo, June, Rex
             </span>
             <div className="ml-auto flex items-center gap-3 text-gray-400">
               <Bell size={20} />
@@ -273,7 +273,7 @@ export default function SlackMock() {
               <PushPin size={15} /> Pins
             </span>
             <span className="flex items-center gap-1 truncate text-gray-300">
-              <FolderSimple size={15} /> PROJECT:cotypist for win...
+              <FolderSimple size={15} /> PROJECT:demo mock...
             </span>
             <span className="flex items-center gap-1 text-gray-300">
               <FolderSimple size={15} /> Files and links
@@ -333,7 +333,7 @@ export default function SlackMock() {
               <input
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder="Message Azure, Dauntedbird, Rishthepro"
+                placeholder="Message Milo, June, Rex"
                 className="w-full bg-transparent px-4 py-2.5 text-[15px] text-gray-100 outline-none placeholder:text-gray-400"
               />
               <div className="flex items-center gap-3 px-4 pb-2.5 text-gray-400">

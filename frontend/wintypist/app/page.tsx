@@ -18,6 +18,7 @@ import {
 } from "@phosphor-icons/react";
 import { Instrument_Sans } from "next/font/google";
 import SlackMock from "./components/SlackMock";
+import DiscordMock from "./components/DiscordMock";
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -33,7 +34,12 @@ export default function Home() {
       <LiquidGlass
         cornerRadius={24}
         padding="20px 24px"
-        style={{ position: "absolute", top: "220px", left: "120px" }}
+        style={{
+          position: "absolute",
+          top: "220px",
+          left: "120px",
+          zIndex: 50,
+        }}
       >
         <div className="h-auto ">
           <h4 className="color-white text-4xl mb-5 font-sans font-light">
@@ -76,7 +82,14 @@ export default function Home() {
           </button>
         </div>
       </LiquidGlass>
-      <SlackMock />
+      {(() => {
+        switch (currentPage) {
+          case "slack":
+            return <SlackMock />;
+          case "discord":
+            return <DiscordMock />;
+        }
+      })()}
     </>
   );
 }
