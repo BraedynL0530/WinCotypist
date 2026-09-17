@@ -2,6 +2,7 @@ package internal
 
 import (
 	"bufio"
+	"fmt"
 	"net"
 	"sync"
 )
@@ -39,6 +40,8 @@ func StartServer(port string, handler DataHandler) (*TCPServer, error) {
 		}
 	}()
 
+	fmt.Println("Server started")
+
 	return server, nil
 }
 
@@ -56,6 +59,7 @@ func (s *TCPServer) Send(text string) error {
 		return net.ErrClosed
 	}
 	_, err := s.conn.Write([]byte(text + "\n"))
+	fmt.Println("Sent:", text)
 	return err
 }
 
@@ -64,6 +68,8 @@ func (s *TCPServer) Close() {
 	if s.conn != nil {
 		s.conn.Close()
 	}
+
+	fmt.Println("Server closing...")
 	s.mu.Unlock()
 	s.listener.Close()
 }
