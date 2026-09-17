@@ -56,6 +56,10 @@ func main() {
 			}
 
 		}
+
+		hook.Register(hook.MouseDown, nil, func(ev hook.Event) {
+			buffer.Reset(false)
+		})
 	}()
 	select {}
 }

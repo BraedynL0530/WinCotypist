@@ -55,7 +55,7 @@ func StartCapture(buffer *RollingBuffer) {
 
 	for ev := range evchan {
 		if ev.Kind == hook.KeyDown && ev.Keychar != 0 { // not like nav stuff, tab arrows etc
-			buffer.append(rune(ev.Keychar))
+			buffer.append(ev.Keychar)
 		}
 	}
 }
