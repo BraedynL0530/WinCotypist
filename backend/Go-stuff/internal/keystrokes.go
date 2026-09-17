@@ -1,9 +1,11 @@
 package internal
 
 import (
-	hook "github.com/robotn/gohook"
+	"fmt"
 	"strings"
 	"sync"
+
+	hook "github.com/robotn/gohook"
 )
 
 //Internal tool, not gonna have indepth docs, im probably only one whos gonna see it :3
@@ -43,6 +45,7 @@ func (r *RollingBuffer) Reset(disable bool) { // like when u switch textboxes it
 func (r *RollingBuffer) SnapShot() string { //self explanatory,
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	fmt.Println("SnapShot:", r.buf.String())
 	return r.buf.String()
 }
 
@@ -52,7 +55,7 @@ func StartCapture(buffer *RollingBuffer) {
 
 	for ev := range evchan {
 		if ev.Kind == hook.KeyDown && ev.Keychar != 0 { // not like nav stuff, tab arrows etc
-			buffer.append(rune(ev.Keychar))
+			buffer.append(ev.Keychar)
 		}
 	}
 }
