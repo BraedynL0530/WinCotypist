@@ -48,10 +48,11 @@ func main() {
 			}
 
 			if ev.Rawcode == 57 && ev.Kind == 1 {
-				err := server.Send("temp text")
+				err := server.Send(buffer.SnapShot())
 				if err != nil {
 					fmt.Println(err)
 				}
+				fmt.Println("SnapShot:", buffer.SnapShot()) // no backend currently :3
 			}
 
 		}
