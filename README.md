@@ -37,7 +37,7 @@ There is also alphanumeric test which uses Python's .isalnum().
 
 How to set up:
 (i) Make sure your virtual environment (venv) is activated. (venv\scripts\activate)
-(ii) Make sure to install pytest and requests in the virtual environment.
+(ii) Make sure to install pytest (python -m pip install pytest) and requests (python -m pip install requests) in the virtual environment.
 
 Running the tests:
 in the terminal run the code python -m pytest or pytest to make sure all the tests pass.
@@ -62,7 +62,7 @@ The actual AI server endpoint has not been connected to anything yet. This is an
 easy to integrate into other backend components easily.
 
 Project Structure
-Rishaan-BAckend/
+Rishaan-Backend/
 -AI-stuff
 -Backend
 -Frontend
@@ -70,3 +70,6 @@ Rishaan-BAckend/
 -Main.py (written by me)
 -Readme.md (written by me)
 - test_main.py (written by me)
+
+Developed by:
+Rishaan Bhattacharya -Azure Team
