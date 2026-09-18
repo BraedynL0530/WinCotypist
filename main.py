@@ -1,49 +1,74 @@
 import json
+import math
+import time
+from logging import exception
+
+import unicodedata
+from urllib.parse import urlparse
 from typing import Any
+
 import requests
-from urllib import response
 
+Response_key = "response"
+Confidence_key = "confidence"
+Max_input_length = 5000
+min_confidence = 0.0
+max_confidence = 100.0
 
-def parse_ai_repsonse(json_data:str) -> tuple[str,float]:
+class AiParserError(Exception):
+    """Base exception for AI parser errors. """
+
+class InvalidJSONError(AiParserError, ValueError):
+    """Raised when the AI returns invalid JSON data"""
+
+class InvalidAIResponseError(AiParserError, TypeError):
+    """Raised when the AI response has an invalid structure or type"""
+
+class AIrequestError(AiParserError):
+    """Raised when communication with the AI server fails"""
+
+def validate_input_text(text:str) -> str:
     """
-    Parse an AI JSON repsonse.
-    The JSON is expected to contain:
-    - response: a string containing the AI's Response
-    - cpmfidence : a number representing the AI's confidence
+    Validate text before sending it to the AI server
 
     Args:
-        json_data (str): the AI's JSON repsonse
+         text: Text supplied by the user/application
     Returns:
-          A tuple containing the response and confidence
-          - respsonse: The ai's response as a string
-          -confidence: The Ai's confidence as a float.
-    Raises:
-          TypeError: If response is not a string
-          ValueError: If the JSON is invalid
-          KeyError: If response of confidence is missing
-      """
-    try:
-        data: dict[str,Any] = json.loads(json_data)
-    except json.JSONDecodeError as error:
-        raise ValueError("Invalid JSON response") from error
-    response = data["response"]
-    confidence = float(data["confidence"])
+          The validated text
+    Raise:
+         TypeError: If text is not a string.
+         ValueError: If text is empty or too long
 
-    if not isinstance(response, str):
-        raise TypeError("response must be a string")
-    return response,confidence
-
-def send_text_to_server(text: str, url: str) -> requests.Response:
     """
-    Send test to a server using an HTTP POST request
+    if not isinstance(text, str):
+        raise TypeError("text must be a string")
+    if not text.strip():
+        raise ValueError("text cannot be empty")
+    if len(text) > Max_input_length:
+        raise ValueError("f text cannot be longer than {Max_input_length} characters")
+    return text
+def validate_server_url(url:str) -> str:
+    """
+    Validate the server url before making a request.
     Args:
-         text: Text to send to the server.
-         url: URL of the server.
-     Returns:
-         THe HTTP response from the server
-
+        url: Url of the AI server
+    Returns:
+          The validated URL.
+    Raises:
+          TypeError: If url is not a string.
+          ValueError: If the url is invalid
     """
-    return requests.post(url, json={"text": text},timeout=10,)
+    if not isinstance(url, str):
+        raise TypeError("Url must be a sting")
+    parsed_url = urlparse(url)
+    if parsed_url.scheme not in ["http", "https"]:
+        raise ValueError("url must be a http or https url")
+    if not parsed_url.netloc:
+        raise ValueError("Url must contain a valid host")
+    return url
+def normalize_response_text(response:str) -> str
+
+
 
 
 
