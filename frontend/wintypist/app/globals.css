@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* liquid-glass-react builds these class names inside node_modules,
+   which Tailwind never scans, so force-generate them or its
+   overlay layers get stuck fully opaque (black glass). */
+@source inline("bg-black opacity-0 opacity-20 opacity-100 mix-blend-overlay pointer-events-none transition-all duration-150 ease-in-out");
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
