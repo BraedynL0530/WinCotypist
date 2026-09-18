@@ -10,6 +10,8 @@ const LiquidGlass = dynamic(() => import("liquid-glass-react"), {
   ),
 });
 import {
+  CaretDown,
+  CaretLeft,
   DiscordLogo,
   EnvelopeSimple,
   GoogleDriveLogo,
@@ -19,6 +21,8 @@ import {
 import { Instrument_Sans } from "next/font/google";
 import SlackMock from "./components/SlackMock";
 import DiscordMock from "./components/DiscordMock";
+import GmailMock from "./components/GmailMock";
+import SearchMock from "./components/SearchMock";
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -29,6 +33,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState<
     "discord" | "slack" | "search" | "email" | "docs"
   >("slack");
+  const [selectorOpen, setSelector] = useState(true);
   return (
     <>
       <LiquidGlass
@@ -36,50 +41,53 @@ export default function Home() {
         padding="20px 24px"
         style={{
           position: "absolute",
-          top: "220px",
+          top: `${selectorOpen ? "200px" : "60px"} `,
           left: "120px",
           zIndex: 50,
+          backgroundColor: "#00000030",
+          borderRadius: "20px 24px",
         }}
+        key={selectorOpen ? "open" : "closed"}
       >
-        <div className="h-auto ">
-          <h4 className="color-white text-4xl mb-5 font-sans font-light">
-            Try it out
+        <div className="h-auto">
+          <h4 className="text-4xl mb-5 font-sans font-light flex justify-between gap-2 items-center">
+            Try it out{" "}
+            <button onClick={() => setSelector(!selectorOpen)}>
+              {selectorOpen ? <CaretDown /> : <CaretLeft />}
+            </button>
           </h4>
-          <button
-            className="flex items-center gap-2 text-2xl"
-            onClick={() => setCurrentPage("slack")}
-          >
-            <SlackLogo size={64} color="white" />
-            Slack
-          </button>
-          <button
-            className="flex items-center gap-2 text-2xl"
-            onClick={() => setCurrentPage("discord")}
-          >
-            <DiscordLogo size={64} color="white" />
-            Discord
-          </button>
-          <button
-            className="flex items-center gap-2 text-2xl"
-            onClick={() => setCurrentPage("email")}
-          >
-            <EnvelopeSimple size={64} color="white" />
-            Email
-          </button>
-          <button
-            className="flex items-center gap-2 text-2xl"
-            onClick={() => setCurrentPage("search")}
-          >
-            <MagnifyingGlass size={64} color="white" />
-            Search
-          </button>
-          <button
-            className="flex items-center gap-2 text-2xl"
-            onClick={() => setCurrentPage("docs")}
-          >
-            <GoogleDriveLogo size={64} color="white" />
-            Docs
-          </button>
+          {selectorOpen && (
+            <>
+              <button
+                className="flex items-center gap-2 text-2xl"
+                onClick={() => setCurrentPage("slack")}
+              >
+                <SlackLogo size={64} color="white" />
+                Slack
+              </button>
+              <button
+                className="flex items-center gap-2 text-2xl"
+                onClick={() => setCurrentPage("discord")}
+              >
+                <DiscordLogo size={64} color="white" />
+                Discord
+              </button>
+              <button
+                className="flex items-center gap-2 text-2xl"
+                onClick={() => setCurrentPage("email")}
+              >
+                <EnvelopeSimple size={64} color="white" />
+                Email
+              </button>
+              <button
+                className="flex items-center gap-2 text-2xl"
+                onClick={() => setCurrentPage("search")}
+              >
+                <MagnifyingGlass size={64} color="white" />
+                Search
+              </button>
+            </>
+          )}
         </div>
       </LiquidGlass>
       {(() => {
@@ -88,6 +96,12 @@ export default function Home() {
             return <SlackMock />;
           case "discord":
             return <DiscordMock />;
+          case "email":
+            return <GmailMock />;
+          case "search":
+            return <SearchMock />;
+          default:
+            return null;
         }
       })()}
     </>
