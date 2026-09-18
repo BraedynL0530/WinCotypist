@@ -7,7 +7,7 @@ data=json.loads(json_string)
 print(data)
 def weather_now(x):
     if x>=20:
-        print("It is cold today")
+        return "hot"
     else:
-         print("It is hot today")
+        return "cold"
 
