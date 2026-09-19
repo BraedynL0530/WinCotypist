@@ -106,6 +106,8 @@ def _extract_ai_values(data: dict[str,Any]) -> tuple[str, float]:
         confidence = data[Confidence_key]
     except KeyError as error:
         raise MissingAIFieldError(Confidence_key) from error
+    if not isinstance(response, str):
+        raise InvalidAIResponseError("response must be a string")
     if isinstance(confidence, bool) or not isinstance(confidence, (float, int)):
         raise InvalidAIResponseError("Confidence must be a number")
     confidence = float(confidence)
