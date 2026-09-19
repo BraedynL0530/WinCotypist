@@ -49,11 +49,8 @@ func (r *RollingBuffer) SnapShot() string { //self explanatory,
 	return r.buf.String()
 }
 
-func StartCapture(buffer *RollingBuffer) {
-	evchan := hook.Start()
-	defer hook.End()
-
-	for ev := range evchan {
+func StartCapture(buffer *RollingBuffer, events <-chan hook.Event) {
+	for ev := range events {
 		if ev.Kind == hook.KeyDown && ev.Keychar != 0 { // not like nav stuff, tab arrows etc
 			buffer.append(ev.Keychar)
 		}
