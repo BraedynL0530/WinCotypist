@@ -1,7 +1,7 @@
 import json
 import math
 import time
-from logging import exception
+
 
 import unicodedata
 from urllib.parse import urlparse
@@ -106,7 +106,7 @@ def _extract_ai_values(data: dict[str,Any]) -> tuple[str, float]:
         confidence = data[Confidence_key]
     except KeyError as error:
         raise MissingAIFieldError(Confidence_key) from error
-    if not isinstance(confidence, bool) or not isinstance(confidence, (float, int)):
+    if isinstance(confidence, bool) or not isinstance(confidence, (float, int)):
         raise InvalidAIResponseError("Confidence must be a number")
     confidence = float(confidence)
     if not math.isfinite(confidence):
@@ -133,6 +133,7 @@ def parse_ai_response(json_data: str) -> tuple[str, float]:
     if not isinstance(data, dict):
         raise InvalidAIResponseError("AI response must be a JSON object")
     return _extract_ai_values(data)
+
 def parse_http_response(http_response: requests.Response) -> tuple[str, float]:
     """
     Parse an HTTP response received from the AI server
