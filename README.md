@@ -169,59 +169,34 @@ Press Ctrl+C to stop
 '''
 keep this terminal open while using 'demo.py'
 ---
-## Running the Demo
-
+(e) Running the Demo
 Open a second terminal in the project directory.
-
-Activate the virtual environment:
-
-```powershell
+Activate the virtual environment in the terminal:
 venv\Scripts\activate
-```
 
-Then run:
-
-```powershell
+Then run this command in the 2nd terminal:
 python demo.py
-```
 
 Wait until the program displays:
-
-```text
 Enter text:
-```
 
 Then enter the text you want to send.
-
 ---
-
-## Current AI Response Format
-
+# Current AI response format
 The current parser expects an AI response similar to:
-
-```json
-{
-    "response": "example text",
-    "confidence": 89.3
-}
-```
+'''json
+{"response":"example text","confidence":89.3}'''
 
 The fields are:
-
-- `response` - the AI-generated response as a string
-- `confidence` - the AI confidence value as a number between `0` and `100`
-
-The exact field names are currently based on the example provided by the team and may change once the final AI response format is decided.
-
+- 'response' - the AI-generated response as a string
+- 'confidence' - the AI confident value as a number between '0' and '100'
+- The exact field names are currently based on the example provided by the team and may change once based on the example provided by the team and may change once the final AI response format is decided.
 ---
-
-## Error Handling
+(f)Error Handling:
 
 The project handles several possible errors, including:
-
 - Invalid JSON
-- Missing `response` or `confidence` fields
-- Incorrect response types
+- Missing 'response' or 'confidence' fields
 - Invalid confidence values
 - Empty input
 - Input that is too long
@@ -230,86 +205,53 @@ The project handles several possible errors, including:
 - Request timeouts
 - Temporary server-side failures
 
-The HTTP client retries certain temporary failures before returning an error.
-
+The HTTP client retires certain temporary failures before returning an error.
 ---
-
-## Testing the Complete System
-
-The complete system can be tested in two ways.
-
-### Automated testing
+(g) Testing the complete system
+THe complete system can be tested in two ways:
+1.Automated testing:
 
 Run:
-
-```powershell
 python -m pytest -v
-```
-
 This runs the unit tests and integration tests automatically.
 
-### Manual testing
+2.Manual Testing:
 
-Start the mock server:
-
-```powershell
+Start the mock server by running this command in the powershell terminal:
 python mock_server.py
-```
 
-Then, from another terminal:
-
-```powershell
+Then from the other terminal:
 python demo.py
-```
 
 Enter text when prompted.
-
-This tests the complete flow manually:
-
-```text
-User input
-    ↓
-HTTP request
-    ↓
-Mock AI server
-    ↓
-JSON response
-    ↓
-Parser
-    ↓
-Response + confidence
-```
-
+This tests the complete flow manually: 
+user input->HTTP request->Mock AI server->JSON response->Parser->Response + confidence
 ---
-
-## Development Notes
-
+## Development notes:
 The mock server is intended only for local development and testing.
 
-It is not the real AI backend and is not intended for production use.
+It is not the real AI backend and is not intended to be used formally.
 
-The HTTP communication and JSON parsing are kept as separate parts of the project so that the mock server can later be replaced with the real AI backend without having to rewrite the entire parser.
+The HTTP communication and JSON parsing are kept as separate parts of the project so that the mock server can later be replaced with the real AI backend without having to rewrite the entire parser
 
----
+## Current Limitations:
 
-## Current Limitations
-
-The project currently uses a mock AI server instead of the actual AI backend.
+The project/component uses a mock AI server instead of the actual AI backend.
 
 The exact AI response structure may also change when the team finalizes the backend/API specification.
 
-When the final API is available, the server URL and response field names can be updated accordingly.
-
+When the final API is available, the server URL and response field names can be updated accordingly
 ---
-
 ## Future Improvements
-
 Possible future work includes:
+-Connecting to the real AI backend
+-Adapting to the parser to the final AI response scheme
+-Adding structured logging
+-Expanding error handling
+-Adding more integration tests
+-Adding performance tests
+-Connecting the parser to the main autocorrect application
 
-- Connecting to the real AI backend
-- Adapting the parser to the final AI response schema
-- Adding structured logging
-- Expanding error handling
-- Adding more integration tests
-- Adding performance tests
-- Connecting the parser to the main autocorrect application
+Developed by:
+Rishaan Bhattacharya 
+Azure Team         
