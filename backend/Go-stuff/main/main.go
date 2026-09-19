@@ -32,27 +32,28 @@ func main() {
 
 	defer server.Close()
 
-	go internal.StartCapture(buffer)
-
 	go func() {
 		evChan := hook.Start()
+		fmt.Println("Hook started")
+		go internal.StartCapture(buffer, evChan)
 
 		for ev := range evChan {
-			if ev.Rawcode == 15 { // tab
-				if ev.Kind == 1 {
+			//println(ev.Rawcode, ev.Kind)
+			if ev.Rawcode == 9 { // tab
+				if ev.Kind == 3 {
 					isTabPressed.Store(true)
 				}
-				if ev.Kind == 2 {
+				if ev.Kind == 5 {
 					isTabPressed.Store(false)
 				}
 			}
 
-			if ev.Rawcode == 57 && ev.Kind == 1 {
+			if ev.Rawcode == 32 && ev.Kind == 3 {
 				err := server.Send(buffer.SnapShot())
 				if err != nil {
 					fmt.Println(err)
 				}
-				fmt.Println("SnapShot:", buffer.SnapShot()) // no backend currently :3
+				fmt.Println("SnapShot:", buffer.SnapShot())
 			}
 
 		}
