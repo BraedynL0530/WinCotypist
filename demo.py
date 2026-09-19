@@ -5,11 +5,12 @@ def main() -> None:
     try:
         text = input("Enter text: ")
         http_response = send_text_to_server(text, Server_url)
+        response, confidence = parse_http_response(http_response)
         print()
         print(f"Response: {response}")
         print(f"Confidence: {confidence}")
-        print(f"Aplhanumeric: {response.isalnum()}")
+        print(f"Alphanumeric: {response.isalnum()}")
     except Exception as error:
         print(f"Error: {error}")
-    if __name__ == "__main__":
+if __name__ == "__main__":
         main()

@@ -13,7 +13,7 @@ def mock_server_url() -> Generator[str, None, None]:
     """Start a temporary mock AI server.
     The code after yield shuts the server down after each test
     """
-    server = ThreadingHTTPServer(("127.0.0.1", 8000),MockAIHandler)
+    server = ThreadingHTTPServer(("127.0.0.1", 0), MockAIHandler)
     thread = Thread(target=server.serve_forever, daemon=True)
     thread.start()
     url = (f"http://127.0.0.1:"
@@ -41,7 +41,7 @@ def test_unicode_end_to_end(mock_server_url: str) -> None:
     assert confidence == 91.5
 def test_spaces_are_normalized(mock_server_url: str,) -> None:
     """Test response normalization through HTTP."""
-    http_response = send_text_to_server("hello123",mock_server_url)
+    http_response = send_text_to_server(" hello123 ",mock_server_url)
     response, confidence = parse_http_response(http_response)
     assert response == "hello123"
     assert confidence == 91.5
@@ -73,7 +73,7 @@ def test_server_error_is_not_silently_accepted() -> None:
     thread = Thread(target=server.serve_forever,daemon=True,)
     thread.start()
     url = (f"http://127.0.0.1:"
-           f"{server.server_port}/server_error")
+           f"{server.server_port}/server-error")
     try:
         with pytest.raises(requests.HTTPError):
             send_text_to_server("hello", url,max_retires=0)
