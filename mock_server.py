@@ -38,6 +38,36 @@ class MockAIHandler(BaseHTTPRequestHandler):
         response_body = b"{this is not a valid JSON"
         self.send_response(200)
         self.send_header ("Content-type", "application/json")
+        self.send_header("Content-Length", str(len(response_body)))
+        self.end_headers()
+        self.wfile.write(response_body)
+    def _send_json(self,status_code:int,data:dict[str, object]) -> None:
+        """Send a JSON response."""
+        response_body = json.dumps(data).encode("utf-8")
+
+        self.send_response(status_code)
+        self.send_header("Content-type", "application/json")
+        self.send_header("Content-Length",str(len(response_body)))
+    def log_message(self,format: str,*args: object) -> None:
+        """Disable the default HTTP server log"""
+        return
+    def start_server() -> None:
+        """Start the local mock AI server"""
+        server = ThreadingHTTPServer(("127.0.0.1", 8000),MockAIHandler)
+        print("Mock AI server running at"
+              "http://127.0.0.1:8000")
+        print ("Press Ctrl+C to stop")
+
+        try:
+            server.serve_forever()
+        except KeyboardInterrupt:
+            print("\nStopping server...")
+        finally:
+            server.server_close()
+    if __name__ == "__main__":
+        start_server()
+
+
 
 
 
