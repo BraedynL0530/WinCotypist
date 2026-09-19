@@ -133,6 +133,74 @@ def parse_ai_response(json_data: str) -> tuple[str, float]:
     if not isinstance(data, dict):
         raise InvalidAIResponseError("AI response must be a JSON object")
     return _extract_ai_values(data)
+def parse_http_response(http_response: requests.Response) -> tuple[str, float]:
+    """
+    Parse an HTTP response received from the AI server
+    Args:
+        http_response: Response returned by requests.
+    Returns:
+          A tuple containing response and confidence.
+    Raises:
+          ValueError: If the server returns a non-2xx status.
+          InvalidJSONError: If the body contains invalid JSON.
+          InvalidAIResponseError: If the response structure is invalid,
+
+    """
+    if not 200<= http_response.status_code < 300:
+        raise ValueError(f"AI server returned HTTP {http_response.status_code}")
+    try:
+        data = http_response.json()
+    except ValueError as error:
+        raise InvalidJSONError("AI server returned invalid JSON") from error
+    if not isinstance(data, dict):
+        raise InvalidAIResponseError("AI response must be a JSON object")
+    return _extract_ai_values(data)
+def send_text_to_server(text:str,url:str,max_retires:int=2,retry_delay: float = 0.5,) -> requests.Response:
+    """
+    Send text to the AI server using an HTTP POST request.
+    Connection errors, timeouts, and 5xx server erros are retired.
+    Args:
+        text: text to send to the server
+        url: AI server URL.
+        max_retires: Number of retry attempts after the first request.
+        retry_delay: Delay between retry attempts in seconds.
+    Returns:
+          Successful requests.Response object.
+    Raises:
+          TypeError: If arguments have invalid types.
+          ValueError: If retry settings are invalid.
+          AIrequestError: If communication ultimately fails.
+          requests.HTTPError: For non-retryable HTTP errors.
+
+    """
+    text = validate_input_text(text)
+    url = validate_server_url(url)
+    if not isinstance(max_retires, int):
+        raise TypeError("max_retries must be an integer")
+    if not isinstance(retry_delay,(int,float)):
+        raise TypeError("retry_delay must be an number")
+    if max_retires < 0:
+        raise ValueError("max_retires cannot be negative")
+    if retry_delay < 0:
+        raise ValueError("retry_delay cannot be negative")
+    for attempt in range (max_retires + 1):
+        try:
+            response = requests.post(url,json={"text":text}, timeout=10,)
+        except (requests.ConnectionError, requests.Timeout) as error:
+            if attempt == max_retires:
+                raise AIrequestError("Could not communicate with the AI server") from error
+            time.sleep(retry_delay)
+            continue
+        if 500<=response.status_code<600:
+            if attempt == max_retires:response.raise_for_status()
+            response.close()
+            time.sleep(retry_delay)
+            continue
+        response.raise_for_status()
+        return response
+    raise AIrequestError("Request failed unexpectedly")
+#notes max_retires was actually supposed to be be max retired
+
 
 
 
