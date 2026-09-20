@@ -64,8 +64,33 @@ The tests cover:
 We can run the tests by installing pytest in venv and using this command in the PowerShell terminal:
 python -m pytest -v
 ---
+3.Test_edge_Cases.py:
 
-3.Mock_server.py:
+It contains additional parameterized tests for edge cases and a wider range of inputs.
+
+Instead of writing a seperate test for every input, 'pytest.mark.parameterize' is used to run the same test against many different values.
+
+The tests currently cover:
+
+- Different Unicode and non-English responses
+- Valid confidence values from '0' to '100'
+- Confidence values outside the allowed range
+- Multiple forms of invalid JSON
+- Incorrect response and confidence data types
+- Missing required fields
+- Empty and whitespace-only input
+- Input at and above the maximum allowed length
+- Valid and Invalid HTTPS/HTTP server URLS
+- Response whitespace and Unicode normalization
+- Addition '.isalnum()' cases
+
+These tests provide broader coverage of the parser and validation functions without changing the main backend code.
+
+Run these tests together with the rest of the project using this command in the PowerShell terminal:
+python -m python -v
+The additional tests are automatically detected by pytest because the files is named 'test_edge_cases.py'
+---
+4.Mock_server.py:
 
  It contains a small local HTTP server that acts as a fake AI backend.
 
@@ -88,7 +113,7 @@ and returns an example AI response:
 This allows the backend code to be tested locally without connecting to the real AI service
 
 ---
-4.Test_integration.py:
+5.Test_integration.py:
 
 It contains integration tests that test the complete request and response flow.
 
@@ -101,7 +126,7 @@ The integration tests create their own temporary local server, so 'mock_server.p
 Run the tests with:
 the command mentioned before, python -m pytest -v.
 ---
-5.demo.py
+6.demo.py
 It provides a simple way to manually test the complete system.
 
 Start the mock server in one terminal using the command: python mock_server.py.
