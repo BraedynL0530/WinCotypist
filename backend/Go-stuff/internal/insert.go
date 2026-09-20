@@ -13,9 +13,6 @@ type InsertionData struct {
 	relevant bool // thumbs up in gui = yes thumbs down = no, for gui/llm later
 }
 
-func FindBox() (x, y int) { // needs to find where cursor is and return int/string of what box
-	return 1, 0 //temp
-}
 func Insert(text string) error {
 	err := robot.WriteAll(text)
 	if err != nil {

@@ -35,12 +35,15 @@ func main() {
 	go func() {
 		evChan := hook.Start()
 		fmt.Println("Hook started")
-		go internal.StartCapture(buffer, evChan)
+		captureChan := make(chan hook.Event)
+		go internal.StartCapture(buffer, captureChan)
 
 		for ev := range evChan {
-			//println(ev.Rawcode, ev.Kind)
+
+			captureChan <- ev
+
 			if ev.Rawcode == 9 { // tab
-				if ev.Kind == 3 {
+				if ev.Kind == 3 || ev.Kind == 4 {
 					isTabPressed.Store(true)
 				}
 				if ev.Kind == 5 {
