@@ -5,7 +5,7 @@ async function fetchCompletion(context) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      context: context, // Fixed variable reference from contextText to context
+      context: context,
       is_secret: false,
     }),
   });
@@ -17,6 +17,17 @@ async function fetchCompletion(context) {
 console.log("Extension working");
 
 let typingTimer;
+let currentTarget = null;
+let currentSuggestion = null;
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Tab" && currentTarget && currentSuggestion) {
+    e.preventDefault();
+    currentTarget.value = currentTarget.value + currentSuggestion;
+    hideSuggestionOverlay();
+    currentSuggestion = null;
+  }
+});
 
 function getSuggestionOverlay() {
   let overlay = document.getElementById("suggestion-text-overlay");
@@ -99,30 +110,25 @@ document.addEventListener(
     )
       return;
 
+    currentTarget = target;
     typingTimer = setTimeout(async () => {
       const text = target.value;
 
-      /* if (text && text.trim().length > 0) {
+      if (text && text.trim().length > 0) {
         try {
           const autocomplete = await fetchCompletion(text);
+          currentSuggestion = autocomplete;
           showSuggestionAtCursor(target, autocomplete);
         } catch (error) {
           console.error("API error:", error);
           hideSuggestionOverlay();
+          currentSuggestion = null;
         }
       } else {
         hideSuggestionOverlay();
-      } */
-
-      showSuggestionAtCursor(target, "this is a test");
-    }, 1000);
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Tab") {
-        e.preventDefault();
-        target.value = target.value + " this is a test";
+        currentSuggestion = null;
       }
-    });
+    }, 1000);
   },
   true,
 );
