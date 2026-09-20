@@ -18,7 +18,62 @@ type RollingBuffer struct {
 	disabled bool
 }
 
-func (r *RollingBuffer) append(ch rune) {
+var keyMap = map[uint16]string{
+	// Letters
+	65: "a", 66: "b", 67: "c", 68: "d", 69: "e",
+	70: "f", 71: "g", 72: "h", 73: "i", 74: "j",
+	75: "k", 76: "l", 77: "m", 78: "n", 79: "o",
+	80: "p", 81: "q", 82: "r", 83: "s", 84: "t",
+	85: "u", 86: "v", 87: "w", 88: "x", 89: "y",
+	90: "z",
+
+	// Numbers
+	48: "0", 49: "1", 50: "2", 51: "3", 52: "4",
+	53: "5", 54: "6", 55: "7", 56: "8", 57: "9",
+
+	// Special characters
+	192: "`",
+	189: "-",
+	187: "=",
+	219: "[",
+	221: "]",
+	220: "\\",
+	186: ";",
+	222: "'",
+	188: ",",
+	190: ".",
+	191: "/",
+
+	32: " ",
+}
+var shiftKeyMap = map[uint16]string{
+	// Numbers
+	48: ")",
+	49: "!",
+	50: "@",
+	51: "#",
+	52: "$",
+	53: "%",
+	54: "^",
+	55: "&",
+	56: "*",
+	57: "(",
+
+	// Special characters
+	192: "~",
+	189: "_",
+	187: "+",
+	219: "{",
+	221: "}",
+	220: "|",
+	186: ":",
+	222: "\"",
+	188: "<",
+	190: ">",
+	191: "?",
+}
+
+func (r *RollingBuffer) append(ch string) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -26,7 +81,7 @@ func (r *RollingBuffer) append(ch rune) {
 		return
 	}
 
-	r.buf.WriteRune(ch)
+	r.buf.WriteString(ch)
 
 	if r.buf.Len() > maxCharLimit {
 		s := r.buf.String()
@@ -49,10 +104,31 @@ func (r *RollingBuffer) SnapShot() string { //self explanatory,
 	return r.buf.String()
 }
 
+var shiftDown bool
+
 func StartCapture(buffer *RollingBuffer, events <-chan hook.Event) {
 	for ev := range events {
-		if ev.Kind == hook.KeyDown && ev.Keychar != 0 { // not like nav stuff, tab arrows etc
-			buffer.append(ev.Keychar)
+		if ev.Kind == hook.KeyDown && ev.Rawcode != 0 && ev.Rawcode != 91 && ev.Rawcode != 162 &&
+			ev.Rawcode != 13 && ev.Rawcode != 13 && ev.Rawcode != 67 &&
+			ev.Rawcode != 20 && ev.Rawcode != 37 && ev.Rawcode != 38 && ev.Rawcode != 39 &&
+			ev.Rawcode != 40 && ev.Rawcode != 9 || ev.Rawcode == 160 && ev.Kind == 5 {
+			//disgusting code i know TwT, i got lazy, filters out sys keys
+			if ev.Rawcode == 160 && ev.Kind == 4 {
+				shiftDown = true
+			}
+			if ev.Rawcode == 160 && ev.Kind == 5 {
+				shiftDown = false
+				continue
+			}
+			if shiftDown {
+				ch := shiftKeyMap[ev.Rawcode]
+				buffer.append(ch)
+			} else {
+				ch := keyMap[ev.Rawcode]
+				buffer.append(ch)
+
+			}
+
 		}
 	}
 }
