@@ -16,6 +16,13 @@ class MockAIHandler(BaseHTTPRequestHandler):
             return
         self.send_error(404,"Endpoint not found")
 
+    def do_GET(self) -> None:
+        """Handle GET requests."""
+        if self.path == "/health":
+            self._send_json(200, {"status": "ok"})
+            return
+        self.send_error(404,"Endpoint not found")
+
     def _handle_predict(self) -> None:
         """Handle the normal prediction endpoint."""
 
