@@ -2,7 +2,6 @@ import threading
 import socket
 import requests
 import json
-#Re organize where this is when Rishi does a PR wioth his work!
 
 
 class TcpClient(threading.Thread):
@@ -18,7 +17,6 @@ class TcpClient(threading.Thread):
             for line in reader:
                 if not line:
                     break
-                sendToLLM(line) # place holder for llm plugin function also mgiht
         finally:
             self.client.close()
 
@@ -39,12 +37,3 @@ class TcpClient(threading.Thread):
         if self.client:
             self.client.close()
 
-
-def sendToLLM(line:str,url:str):
-    if line:
-        line = line.replace("\n", "")
-        line = line.replace("\r", "")
-    line = f'{{"content": "{line}"}}'
-    line= json.loads(line)
-    requests.post(url, data=line) # change as needed later
-    return

