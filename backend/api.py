@@ -2,8 +2,7 @@ import threading
 import socket
 import requests
 import json
-
-
+import main
 class TcpClient(threading.Thread):
     def __init__(self, host, port):
         threading.Thread.__init__(self)
@@ -36,4 +35,5 @@ class TcpClient(threading.Thread):
     def close(self):
         if self.client:
             self.client.close()
+
 
