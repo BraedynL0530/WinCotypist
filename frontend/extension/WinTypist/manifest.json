@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "WinTypist",
+  "version": "1.0.0",
+  "description": "Autocomplete suggestions for your browser",
+  "permissions": ["activeTab"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content.js"]
+    }
+  ]
+}
