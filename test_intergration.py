@@ -22,6 +22,15 @@ def mock_server_url() -> Generator[str, None, None]:
     server.shutdown()
     server.server_close()
     thread.join()
+def test_health_endpoint(server: ThreadingHTTPServer) -> None:
+    """Test that the mock server health endpoint works."""
+
+    url = (f"http://127.0.0.1"
+           f"{server.server_port}/health")
+    response = requests.get(url, timeout=5)
+
+    assert response.status_code ==  200
+    assert response.json() == {"status": "ok"}
 
 def test_end_to_end_request(mock_server_url: str) -> None:
     """Test the complete request-to-parser flow."""
