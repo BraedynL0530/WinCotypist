@@ -1,7 +1,15 @@
 import ctypes
 import time
-from comtypes.client import CreateObject
+from comtypes.client import CreateObject,GetModule
 from comtypes.gen import UIAutomationClient
+if not UIAutomationClient:
+    try:
+        GetModule("UIAutomationCore.dll")
+        from comtypes.gen import UIAutomationClient
+    except Exception as e:
+        print(f"Failed to initialize UIAutomation module: {e}")
+        exit(1)
+
 #suppose to find the typing cursor globablyy!
 
 
@@ -39,14 +47,21 @@ def get_universal_caret_coordinates():
                     width = rects[2]
 
                     return int(left + width), int(top)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"Error: {e}")
     return None
 
 try:
+    last_coords = None
     while True:
         coords = get_universal_caret_coordinates()
-        if coords:
-            print(f"X: {coords[0]}, Y: {coords[1]}")
+        if coords and coords != last_coords:
+                   print(f"X: {coords[0]}, Y: {coords[1]}")
+                   last_coords = coords
         time.sleep(0.05) # 50ms interval prevents lag while typing
+except Exception as e:
+    print(f"Error: {e}")
+
+
+
 
