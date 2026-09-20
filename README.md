@@ -112,6 +112,21 @@ and returns an example AI response:
 '''
 This allows the backend code to be tested locally without connecting to the real AI service
 
+Note: We can test whether the server is running properly through the health endpoint. More details given below:
+
+Health Endpoint:
+The mock AI server includes a health check endpoint:
+GET /health
+The endpoint is used to verify that the local server is running and able to accept HTTP requests.
+
+Example:
+http://127.0.0.1:8000/health
+The health endpoint is also covered by an integration test in test_integration.py. 
+we can test this by running the test suite by typing this is in the Power-Shell terminal:
+python -m pytest -v
+
+A successful health check does not thest the AI parser itself; it only confirms that the HTTP server is reachable and responding correctly.
+
 ---
 5.Test_integration.py:
 
