@@ -6,14 +6,15 @@ import { WinButton } from "./Navbar";
 const abel = Abel({ subsets: ["latin"], weight: "400" });
 
 const BRIGHT_TEXT = "The quick brown";
-const DIM_TEXT = " fox";
+const DIM_TEXT = " fox jumped over";
 const FULL_TEXT = BRIGHT_TEXT + DIM_TEXT;
 
 export default function Section1() {
   const [typedLength, setTypedLength] = useState(0);
+  const [dimLength, setDimLength] = useState(0);
 
   useEffect(() => {
-    if (typedLength < FULL_TEXT.length) {
+    if (typedLength < BRIGHT_TEXT.length) {
       const timeout = setTimeout(() => {
         setTypedLength((prev) => prev + 1);
       }, 70);
@@ -21,14 +22,17 @@ export default function Section1() {
     }
   }, [typedLength]);
 
-  const brightTyped =
-    typedLength <= BRIGHT_TEXT.length
-      ? FULL_TEXT.slice(0, typedLength)
-      : BRIGHT_TEXT;
-  const dimTyped =
-    typedLength > BRIGHT_TEXT.length
-      ? FULL_TEXT.slice(BRIGHT_TEXT.length, typedLength)
-      : "";
+  useEffect(() => {
+    if (typedLength >= BRIGHT_TEXT.length && dimLength < DIM_TEXT.length) {
+      const timeout = setTimeout(() => {
+        setDimLength((prev) => prev + 1);
+      }, 70);
+      return () => clearTimeout(timeout);
+    }
+  }, [typedLength, dimLength]);
+
+  const brightTyped = FULL_TEXT.slice(0, typedLength);
+  const dimTyped = DIM_TEXT.slice(0, dimLength);
 
   return (
     <div className="flex items-center justify-between pl-[180px] pr-16 min-h-[calc(100vh-80px)]">
@@ -52,13 +56,13 @@ export default function Section1() {
           style={{ boxShadow: "0 5px 9px 1px #283445" }}
         >
           <span className="text-white font-medium text-lg">{brightTyped}</span>
-          {dimTyped && (
-            <span className="text-gray-500 text-lg">{dimTyped}</span>
-          )}
           <span
             className="inline-block w-[2px] h-6 bg-white ml-0.5"
             style={{ animation: "blink 1s step-end infinite" }}
           />
+          {dimTyped && (
+            <span className="text-gray-500 text-lg">{dimTyped}</span>
+          )}
         </div>
       </div>
     </div>
