@@ -57,6 +57,7 @@ func main() {
 				} else {
 
 					pendingCompletion = ""
+					fmt.Printf(`{"type":"hide"}` + "\n")
 				}
 			}
 
