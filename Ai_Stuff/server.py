@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import re
 
-from complete import complete, MODEL   # the engine from complete.py
+from .complete import complete, MODEL   # the engine from complete.py
 
 app = FastAPI(title="Cotypist AI") 
 app.add_middleware(CORSMiddleware, allow_origins=["*"],

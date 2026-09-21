@@ -55,6 +55,7 @@ func main() {
 						isTabPressed.Store(false)
 					}
 				} else {
+
 					pendingCompletion = ""
 				}
 			}

@@ -67,11 +67,4 @@ def yeild_wrapper():
         print(f"Error: {e}")
 
 
-if __name__ == "__main__":
-    print("Listening for caret coordinates... Type anywhere.")
-
-    coord_generator = yeild_wrapper()
-
-    for x, y in coord_generator:
-        print(f"Received from loop -> X: {x}, Y: {y}")
 

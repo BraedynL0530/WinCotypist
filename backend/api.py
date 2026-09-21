@@ -21,6 +21,13 @@ class TcpClient(threading.Thread):
                     break
                 response = send_text_to_server(line, self.ai_host) # check if this is even right
                 if response:
+                    print(
+                        json.dumps({
+                            "type": "completion",
+                            "text": response,
+                        }),
+                        flush=True,
+                    )
                     self.send(parse_http_response(response))
         finally:
             self.client.close()
@@ -43,17 +50,3 @@ class TcpClient(threading.Thread):
             self.client.close()
 
 
-
-if __name__ == "__main__":
-    client = TcpClient(
-        host="127.0.0.1",
-        port=8080,
-        ai_host="http://127.0.0.1:8000/complete",
-    )
-
-    client.connect()
-
-    try:
-        threading.Event().wait()
-    except KeyboardInterrupt:
-        client.close()
