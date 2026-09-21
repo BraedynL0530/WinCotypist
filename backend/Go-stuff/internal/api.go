@@ -58,7 +58,7 @@ func (s *TCPServer) Send(text string) error {
 	if s.conn == nil {
 		return net.ErrClosed
 	}
-	_, err := s.conn.Write([]byte(text + "\n"))
+	_, err := s.conn.Write([]byte(text + "\n")) // so it knows its done
 	fmt.Println("Sent:", text)
 	return err
 }
@@ -73,3 +73,4 @@ func (s *TCPServer) Close() {
 	s.mu.Unlock()
 	s.listener.Close()
 }
+

@@ -2,12 +2,14 @@ import threading
 import socket
 import requests
 import json
+from main import parse_http_response, send_text_to_server
 
 
 class TcpClient(threading.Thread):
-    def __init__(self, host, port):
+    def __init__(self, host, port, ai_host):
         threading.Thread.__init__(self)
         self.host = host
+        self.ai_host = ai_host
         self.port = port
         self.client = None
 
@@ -17,6 +19,18 @@ class TcpClient(threading.Thread):
             for line in reader:
                 if not line:
                     break
+                response = send_text_to_server(line, self.ai_host) # check if this is even right
+                if response:
+
+                    self.send(parse_http_response(response))
+                    response = parse_http_response(response)#this is not efficent ik im lazy
+                    print(
+                        json.dumps({
+                            "type": "completion",
+                            "text": response,
+                        }),
+                        flush=True,
+                    )
         finally:
             self.client.close()
 
@@ -36,4 +50,5 @@ class TcpClient(threading.Thread):
     def close(self):
         if self.client:
             self.client.close()
+
 
