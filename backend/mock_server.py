@@ -1,10 +1,10 @@
-import json
+"""import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 class MockAIHandler(BaseHTTPRequestHandler):
-    """Simple local server that imitates the AI backend"""
+    Simple local server that imitates the AI backend
     def do_POST(self) -> None:
-        """Handle Post requests"""
+            Handle Post requests
         if self.path == "/predict":
             self._handle_predict()
             return
@@ -17,8 +17,7 @@ class MockAIHandler(BaseHTTPRequestHandler):
         self.send_error(404,"Endpoint not found")
 
     def _handle_predict(self) -> None:
-        """Handle the normal prediction endpoint."""
-
+        Handle the normal prediction endpoint.
         content_length = int(self.headers.get("Content-Length",0))
         body = self.rfile.read(content_length)
 
@@ -38,7 +37,7 @@ class MockAIHandler(BaseHTTPRequestHandler):
         }
         self._send_json(200,ai_response)
     def _send_invalid_json(self) -> None:
-        """Send an intentionally invalid JSON response"""
+        Send an intentionally invalid JSON response
         response_body = b"{this is not a valid JSON"
         self.send_response(200)
         self.send_header ("Content-type", "application/json")
@@ -46,7 +45,7 @@ class MockAIHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_body)
     def _send_json(self,status_code:int,data: dict[str, object]) -> None:
-        """Send a JSON response."""
+        Send a JSON response.
         response_body = json.dumps(data).encode("utf-8")
 
         self.send_response(status_code)
@@ -55,10 +54,10 @@ class MockAIHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_body)
     def log_message(self,format: str,*args: object) -> None:
-        """Disable the default HTTP server log"""
+        Disable the default HTTP server log
         return
 def start_server() -> None:
-        """Start the local mock AI server"""
+        Start the local mock AI server
         server = ThreadingHTTPServer(("127.0.0.1", 8000),MockAIHandler)
         print("Mock AI server running at "
               "http://127.0.0.1:8000")
@@ -79,3 +78,4 @@ if __name__ == "__main__":
 
 
 
+"""
