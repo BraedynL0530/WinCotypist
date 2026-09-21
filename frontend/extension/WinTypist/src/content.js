@@ -14,6 +14,18 @@ async function fetchCompletion(context) {
   return data.completion;
 }
 
+let delayMs = 500;
+let state = true;
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === "DELAY_UPDATE") {
+    delayMs = msg.delay;
+  }
+  if (msg.type === "STATE_UPDATE") {
+    state = msg.enabled;
+  }
+});
+
 console.log("Extension working");
 
 let typingTimer;
@@ -83,7 +95,6 @@ function showSuggestionAtCursor(input, suggestionText) {
   overlay.style.letterSpacing = style.letterSpacing;
   overlay.style.lineHeight = style.lineHeight;
 
-  // 4px space after the text cursor
   overlay.style.left = `${x + 4}px`;
   overlay.style.top = `${y}px`;
   overlay.textContent = suggestionText;
@@ -98,6 +109,9 @@ function hideSuggestionOverlay() {
 document.addEventListener(
   "input",
   (event) => {
+    if (!state) return;
+    if (event.target.type === "password") return;
+
     clearTimeout(typingTimer);
     hideSuggestionOverlay();
 
@@ -128,7 +142,7 @@ document.addEventListener(
         hideSuggestionOverlay();
         currentSuggestion = null;
       }
-    }, 1000);
+    }, delayMs);
   },
   true,
 );

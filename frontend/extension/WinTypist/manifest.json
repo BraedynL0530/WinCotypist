@@ -3,7 +3,7 @@
   "name": "WinTypist",
   "version": "1.0.0",
   "description": "Autocomplete suggestions for your browser",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage"],
   "host_permissions": ["http://*/*", "https://*/*"],
   "content_scripts": [
     {
@@ -12,6 +12,16 @@
     }
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "public/logo.png",
+      "48": "public/logo.png",
+      "128": "public/logo.png"
+    }
+  },
+  "icons": {
+    "16": "public/logo.png",
+    "48": "public/logo.png",
+    "128": "public/logo.png"
   }
 }

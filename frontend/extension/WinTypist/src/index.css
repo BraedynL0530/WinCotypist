@@ -1,1 +1,4 @@
 @import "tailwindcss";
+
+@source "../popup.html";
+@source "../src/**/*.{js,ts,jsx,tsx}";
