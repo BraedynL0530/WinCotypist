@@ -21,6 +21,9 @@ class TcpClient(threading.Thread):
                     break
                 response = send_text_to_server(line, self.ai_host) # check if this is even right
                 if response:
+
+                    self.send(parse_http_response(response))
+                    response = parse_http_response(response)#this is not efficent ik im lazy
                     print(
                         json.dumps({
                             "type": "completion",
@@ -28,7 +31,6 @@ class TcpClient(threading.Thread):
                         }),
                         flush=True,
                     )
-                    self.send(parse_http_response(response))
         finally:
             self.client.close()
 

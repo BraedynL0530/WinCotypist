@@ -12,6 +12,22 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "extraResource": [
+          "../../dist/go.exe",
+          "../../dist/WinCotypistBackend.exe"
+        ]
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel"
+        }
+      ]
+    }
+  },
+
   "keywords": [],
   "author": {
     "name": "Braedyn L",

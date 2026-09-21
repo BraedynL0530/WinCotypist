@@ -47,19 +47,20 @@ func main() {
 			captureChan <- ev
 
 			if ev.Kind == 3 {
-				if ev.Rawcode == 9 { // tab
-					if ev.Kind == 3 || ev.Kind == 4 {
-						isTabPressed.Store(true)
-					}
-					if ev.Kind == 5 {
-						isTabPressed.Store(false)
-					}
-				} else {
-
-					pendingCompletion = ""
-					fmt.Printf(`{"type":"hide"}` + "\n")
-				}
-			}
+                if ev.Rawcode == 9 {
+                    if pendingCompletion != "" {
+                        err := internal.Insert(pendingCompletion)
+                        if err != nil {
+                            fmt.Println(err)
+                        } else {
+                            pendingCompletion = ""
+                        }
+                    }
+                } else {
+                    pendingCompletion = ""
+                    fmt.Printf(`{"type":"hide"}` + "\n")
+                }
+            }
 
 			if ev.Rawcode == 32 && ev.Kind == 3 {
 				err := server.Send(buffer.SnapShot())

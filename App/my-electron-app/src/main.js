@@ -14,8 +14,13 @@ let pythonProcess = null;
 let lastCaret = null;
 let lastCompletion = '';
 
-const GO_BINARY = path.join(__dirname, '../../bin/YOUR_GO_BINARY.exe');
-const PYTHON_BINARY = path.join(__dirname, '../../bin/YOUR_PYTHON_BINARY.exe');
+const GO_BINARY = app.isPackaged
+    ? path.join(process.resourcesPath, "bin", "go.exe")
+    : path.join(__dirname, "../../dist", "go.exe");
+
+const PYTHON_BINARY = app.isPackaged
+    ? path.join(process.resourcesPath, "bin", "WinCotypistBackend.exe")
+    : path.join(__dirname, "../../dist", "WinCotypistBackend.exe");
 
 function sendToRenderer(message) {
   if (!mainWindow || mainWindow.isDestroyed()) {
