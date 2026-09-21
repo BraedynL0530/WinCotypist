@@ -51,17 +51,27 @@ def get_universal_caret_coordinates():
         print(f"Error: {e}")
     return None
 
-try:
-    last_coords = None
-    while True:
-        coords = get_universal_caret_coordinates()
-        if coords and coords != last_coords:
-                   print(f"X: {coords[0]}, Y: {coords[1]}")
-                   last_coords = coords
-        time.sleep(0.05) # 50ms interval prevents lag while typing
-except Exception as e:
-    print(f"Error: {e}")
+def yeild_wrapper():
+    try:
+        last_coords = None
+        while True:
+            coords = get_universal_caret_coordinates()
+            if coords and coords != last_coords:
+                yield coords
+                print(f"X: {coords[0]}, Y: {coords[1]}")
+                last_coords = coords
+            elif not coords:
+                last_coords = None
+            time.sleep(0.05) # 50 ms interval prevents lag
+    except Exception as e:
+        print(f"Error: {e}")
 
 
+if __name__ == "__main__":
+    print("Listening for caret coordinates... Type anywhere.")
 
+    coord_generator = yeild_wrapper()
+
+    for x, y in coord_generator:
+        print(f"Received from loop -> X: {x}, Y: {y}")
 
